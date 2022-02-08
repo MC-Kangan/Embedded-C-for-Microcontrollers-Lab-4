@@ -13,7 +13,7 @@
 
 void main(void) {
     LCD_Init();  
-	LCD_sendstring("Hello World!");
+	LCD_sendstring("Hello World! Nice to see u");
     LCD_setline(2);
     LCD_sendstring("Hello World!");
 //	LCD_setline(1); //Set Line 1
@@ -31,7 +31,7 @@ void main(void) {
 //	LCD_sendbyte(0x21,1); //!
 
     while (1) {
-
+    LCD_scroll();
     }
 }
 
