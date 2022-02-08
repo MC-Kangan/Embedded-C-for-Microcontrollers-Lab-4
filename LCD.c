@@ -1,5 +1,6 @@
 #include <xc.h>
 #include "LCD.h"
+#include <stdio.h>
 
 /************************************
  * Function to toggle LCD enable bit on then off
@@ -124,7 +125,7 @@ void LCD_sendstring(char *string)
 ************************************/
 void LCD_scroll(void)
 {
-    __delay_ms(100);
+    __delay_ms(500);
     LCD_sendbyte(0b00011000,0); // shift display, shift left
     //code here to scroll the text on the LCD screen
 }
@@ -137,4 +138,5 @@ void LCD_scroll(void)
 void ADC2String(char *buf, unsigned int ADC_val){
 	//code to calculate the inegeter and fractions part of a ADC value
 	// and format as a string using sprintf (see GitHub readme)
+    sprintf(buf,"V = %03d",ADC_val); // Store the string into buf
 }
