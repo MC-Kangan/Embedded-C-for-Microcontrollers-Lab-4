@@ -8,8 +8,10 @@
 void LCD_E_TOG(void)
 {
 	//turn the LCD enable bit on
+    LCD_E = 1; // E stands for chip enable signal
 	__delay_us(2); //wait a short delay
 	//turn the LCD enable bit off again
+    LCD_E = 0;
 }
 
 /************************************
@@ -19,9 +21,13 @@ void LCD_sendnibble(unsigned char number)
 {
 
 	//set the data lines here (think back to LED array output)
+    if (number & 0b0001) {LCD_DB4 = 1;} else {LCD_DB4 = 0;}
+    if (number & 0b0010) {LCD_DB5 = 1;} else {LCD_DB5 = 0;}
+    if (number & 0b0100) {LCD_DB6 = 1;} else {LCD_DB6 = 0;}
+    if (number & 0b1000) {LCD_DB7 = 1;} else {LCD_DB7 = 0;}
 
     LCD_E_TOG();			//toggle the enable bit to instruct the LCD to read the data lines
-    __delay_us(5);      //Delay 5uS
+    __delay_us(5);          //Delay 5uS
 }
 
 
@@ -32,9 +38,17 @@ void LCD_sendnibble(unsigned char number)
 void LCD_sendbyte(unsigned char Byte, char type)
 {
     // set RS pin whether it is a Command (0) or Data/Char (1) using type argument
+    LCD_RS = type;
     // send high bits of Byte using LCDout function
     // send low bits of Byte using LCDout function
-	
+    
+    // Most significant bits
+    unsigned char msb = Byte >> 4;  // Right shift 4 times to get the most significant bits from the 8 bits
+    LCD_sendnibble(msb);
+    // Least significant bits
+    unsigned char lsb = Byte & 0b00001111; // Use AND condition to extract only the last 4 sig bits
+    LCD_sendnibble(lsb); //
+    
     __delay_us(50);               //delay 50uS (minimum for command to execute)
 }
 
@@ -44,16 +58,39 @@ void LCD_sendbyte(unsigned char Byte, char type)
 void LCD_Init(void)
 {
 
-    //Define LCD Pins as Outputs and
+    //Define LCD Pins as Outputs and (Checked Clicker2 manual)
     //set all pins low (might be random values on start up, fixes lots of issues)
-
+    TRISEbits.TRISE1 = 0;
+    TRISEbits.TRISE3 = 0;
+    TRISBbits.TRISB2 = 0;
+    TRISBbits.TRISB3 = 0;
+    TRISCbits.TRISC2 = 0;
+    TRISCbits.TRISC6 = 0;
+    
+    LCD_DB4 = 0;
+    LCD_DB5 = 0;
+    LCD_DB6 = 0;
+    LCD_DB7 = 0;
 
     //Initialisation sequence code
 	// follow the sequence in the GitHub Readme picture for 4-bit interface.
 	// first Function set should be sent with LCD_sendnibble (the LCD is in 8 bit mode at start up)
 	// after this use LCD_sendbyte to operate in 4 bit mode
-
+    __delay_ms(50);
+    LCD_sendnibble(0b0011); // Function set 1
+    __delay_ms(50);
+    LCD_sendbyte(0b00101000,0); // Function set 2 (from the graph, 1st row is 0010, 2nd row is 1000, N = 1, F = 0)
+    __delay_ms(50);
+    LCD_sendbyte(0b00101000,0); // Function set 3 (from the graph, 1st row is 0010, 2nd row is 1000, N = 1, F = 0)
+    __delay_ms(50);
+    LCD_sendbyte(0b00001000,0); // Display ON/OFF control (from the graph, 1st row is 0000, 2nd row is 1000, D = 0, C = 0, B = 0)
+    __delay_ms(50);
+    LCD_sendbyte(0b00000001,0); // Display clear
+    __delay_ms(5);
+    LCD_sendbyte(0b00000110,0); // Entry Mode Set
+    
 	//remember to turn the LCD display back on at the end of the initialisation (not in the data sheet)
+    LCD_sendbyte(0b00001111,0); // Turn on the display, turn on display (D), cursor (C) and blinking (B)
 }
 
 /************************************
@@ -63,6 +100,13 @@ void LCD_setline (char line)
 {
     //Send 0x80 to set line to 1 (0x00 ddram address)
     //Send 0xC0 to set line to 2 (0x40 ddram address)
+     if (line==1){
+        LCD_sendbyte(0x80,0);//Send 0x80 to set line to 1 (0x00 ddram address), 0x80 is 128
+    }
+    if (line==2){
+        LCD_sendbyte(0x40,0);//Send 0xC0 to set line to 2 (0x40 ddram address), 0xC0 is 192
+    }
+    
 }
 
 /************************************
