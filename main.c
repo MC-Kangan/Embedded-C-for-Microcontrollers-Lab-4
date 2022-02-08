@@ -14,6 +14,8 @@
 void main(void) {
     LCD_Init();  
 	LCD_sendstring("Hello World!");
+    LCD_setline(2);
+    LCD_sendstring("Hello World!");
 //	LCD_setline(1); //Set Line 1
 //	LCD_sendbyte(0x48,1); //H
 //	LCD_sendbyte(0x65,1); //E
