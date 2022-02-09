@@ -145,18 +145,17 @@ void ADC2String(char *buf, unsigned int ADC_val){
     
 }
 
-void LCD_create_character(unsigned char *character, unsigned char CGRAM_loc) {
-    LCD_sendbyte(0b01000000 + CGRAM_loc * 8,0);  // Set CGRAM address in address counter.
-    int i;
-    for (i=0;i<8;i++) {  // sending character pattern to CGRAM
-        LCD_sendbyte(character[i],1);
-    }
-}
+//void LCD_create_character(unsigned char *character, unsigned char CGRAM_loc) {
+//    LCD_sendbyte(0b01000000 + CGRAM_loc * 8,0);  // Set CGRAM address in address counter.
+//    int i;
+//    for (i=0;i<8;i++) {  // sending character pattern to CGRAM
+//        LCD_sendbyte(character[i],1);
+//    }
+//}
 
 void LCD_update_screen(unsigned char player_pos, unsigned char enemy_pos) {
-    LCD_sendbyte(player_pos,0); // set cursor position
-    LCD_sendbyte(0,1);      // display 'player' character data in CGRAM to LCD 
-    LCD_sendbyte(enemy_pos,0);  // set cursor position
-    LCD_sendbyte(1,1);      // display 'enemy' character data in CGRAM to LCD
+    LCD_sendbyte(player_pos,0);          // set cursor position
+    LCD_sendbyte(0b01000100,1);          // display 'player' character data 'D' in CGRAM to LCD 
+    LCD_sendbyte(enemy_pos,0);           // set cursor position
+    LCD_sendbyte(0b10111011,1);          // display 'enemy' character data '<<' in CGRAM to LCD
 }
-

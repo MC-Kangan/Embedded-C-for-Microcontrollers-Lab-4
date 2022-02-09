@@ -8,8 +8,8 @@
 void Interrupts_init(void)
 {   //PIE2bits.C1IE=1; 	//enable comparator
     //INTCONbits.GIEL=1;  // turn on peripheral interrupts
-    INTCONbits.GIE=1; 	//turn on interrupts globally
     PIE0bits.TMR0IE = 1;
+    INTCONbits.GIE=1; 	//turn on interrupts globally
 	// turn on global interrupts, peripheral interrupts and the interrupt source 
 	// It's a good idea to turn on global interrupts last, once all other interrupt configuration is done.
 }
