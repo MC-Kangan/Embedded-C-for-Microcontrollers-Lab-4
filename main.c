@@ -28,10 +28,10 @@ void main(void) {
     unsigned char enemy_pos = 0XC0 + 18;  // position at the end of the second row
     unsigned char enemy_pos2 = 0X80;  // position at the end of the first row
     unsigned char bullet1 = 0;
-    //unsigned char bullet2 = 0;
+    unsigned char bullet2 = 0;
     unsigned char second = 0; 
 
-    LCD_update_screen(player_pos, enemy_pos, enemy_pos2, bullet1);
+    LCD_update_screen(player_pos, enemy_pos, enemy_pos2, bullet1, bullet2);
     TRISFbits.TRISF2=1; //set TRIS value for pin (input)
     ANSELFbits.ANSELF2=0; //turn off analogue input on pin     
     TRISFbits.TRISF3=1; //set TRIS value for pin (input)
@@ -48,26 +48,22 @@ void main(void) {
         if (T0CON0bits.T0OUT){
             Timer0_restart();
             second += 1;
-            if (second % 5 == 0){bullet1 = enemy_pos;} 
-            //if (second % 7 == 0){bullet2 = enemy_pos2;} 
-            if (second == 60){second = 0;}
-            bullet1 -=2;
-            //bullet2 +=3;
-            //if (bullet1 < 0xC0){bullet1 = 0;}
-            //if (bullet1 > 0x80){bullet2 = 0;}
             if (--enemy_pos < 0xC0) {enemy_pos = 0xC0 + 18;}
-            //LCD_update_screen(player_pos, enemy_pos, enemy_pos2);
             if (++enemy_pos2 > 0x80 + 15) {enemy_pos2 = 0x80;}
-            LCD_update_screen(player_pos, enemy_pos, enemy_pos2, bullet1);
+            if (second % 5 == 0){bullet1 = enemy_pos;} 
+            if (second % 3 == 0){bullet2 = enemy_pos2;} 
+            if (second == 60){second = 0;}
+            if (second > 5){bullet1 -=2; bullet2 +=2;}                   
+            LCD_update_screen(player_pos, enemy_pos, enemy_pos2, bullet1, bullet2);
         }
         if (PORTFbits.RF3 == 0){
-            player_pos = LCD_move(player_pos,enemy_pos,enemy_pos2,bullet1);
+            player_pos = LCD_move(player_pos,enemy_pos,enemy_pos2,bullet1,bullet2);
             __delay_ms(200); // Delay is needed to improve the smoothness of the player's movement
         }
-        if (player_pos == enemy_pos || player_pos == enemy_pos2 || player_pos == bullet1){
-            //LCD_sendbyte(1,0); // Clear Display
+        if (player_pos == enemy_pos || player_pos == enemy_pos2 || player_pos == bullet1 || player_pos == bullet2){
+            
             LCD_setline(1);
-            LCD_sendstring("Game Over!!");               //display 'Game Over!!' in Line 1
+            LCD_sendstring("Game Over!!     ");               //display 'Game Over!!' in Line 1
             LCD_setline(2);
             LCD_sendstring("Press RF2 to Go");     //display 'Press RF2 to Go' in Line 2
             while (PORTFbits.RF2);

@@ -20,8 +20,11 @@ void Interrupts_init(void)
 ************************************/
 void __interrupt(high_priority) HighISR()
 {   if(PIR0bits.TMR0IF){    //check the interrupt source some code you want to execute here; 
-    TMR0H=0b00001011;  // rewritting initial values
-    TMR0L=0b11011011;  // rewritting initial values
+    TMR0H=0;  // rewritting initial values
+    TMR0L=0;  // rewritting initial values
+    
+    //TMR0H=0b10000101;            //write High reg first, update happens when low reg is written to
+    //TMR0L=0b11101101;
     PIR0bits.TMR0IF = 0;  // clear the flag
 	}
 	//add your ISR code here i.e. check the flag, do something (i.e. toggle an LED), clear the flag...

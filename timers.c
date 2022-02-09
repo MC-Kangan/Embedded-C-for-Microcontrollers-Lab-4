@@ -8,15 +8,19 @@ void Timer0_init(void)
 {
     T0CON1bits.T0CS=0b010; // Fosc/4
     T0CON1bits.T0ASYNC=1; // see datasheet errata - needed to ensure correct operation when Fosc/4 used as clock source
-    T0CON1bits.T0CKPS=0b1000; // 1:256
+    T0CON1bits.T0CKPS=0b0111; // 1:256
                               // 1/65535 = 4 * PS/64000000 = 244.14
                               // 4*256/64000000 = 1/62500
     T0CON0bits.T016BIT=1;	//16bit mode	
 	
     // it's a good idea to initialise the timer registers so we know we are at 0
-    TMR0H=0b00001011;            //write High reg first, update happens when low reg is written to
-    TMR0L=0b11011011;            // 4 * 256 * (250*250-1)/640000000 = 0.999984
-                        // (1-0.999984) * 3600 * 24 * 365 = 504.576 seconds
+    TMR0H=0;            //write High reg first, update happens when low reg is written to
+    TMR0L=0;            
+                        
+    //TMR0H=0b10000101;            //write High reg first, update happens when low reg is written to
+    //TMR0L=0b11101101;            
+    
+    //10000101
     T0CON0bits.T0EN=1;	//start the timer
 }
 
