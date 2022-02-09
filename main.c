@@ -22,35 +22,12 @@ void main(void) {
     //  unsigned int ADC_val = 0;
     //	char buf[0]; // Define an array to store string
 
-    unsigned char player_pos = 0xC0 + 1;  // position at the second row
+    unsigned char player_pos = 0xC0;        // position at the second row
     unsigned char enemy_pos = 0XC0 + 15;  // position at the end of the second row
-    unsigned char player[] = {  // person character
-        0b10000,
-        0b01000,
-        0b00100,
-        0b00011,
-        0b00100,
-        0b01000,
-        0b10000,
-        0b00000  // cursor position
-    };
-    unsigned char enemy[] = {  // enemy character
-        0b11111,
-        0b11111,
-        0b11111,
-        0b11111,
-        0b11111,
-        0b11111,
-        0b11111,
-        0b00000,  // cursor position
-    };
-    LCD_sendbyte(0b01000100,0);
-    LCD_sendbyte(0b10111011,0);
-    
+
     LCD_update_screen(player_pos, enemy_pos);
     TRISFbits.TRISF2=1; //set TRIS value for pin (input)
-    ANSELFbits.ANSELF2=0; //turn off analogue input on pin  
-    
+    ANSELFbits.ANSELF2=0; //turn off analogue input on pin     
     TRISFbits.TRISF3=1; //set TRIS value for pin (input)
     ANSELFbits.ANSELF3=0; //turn off analogue input on pin  
     
@@ -65,9 +42,10 @@ void main(void) {
         if (T0CON0bits.T0OUT){
             Timer0_restart();
             if (--enemy_pos < 0xC0) {enemy_pos = 0xC0 + 15;}
-            LCD_sendbyte(1,0);  // clear display
-            __delay_ms(2);
             LCD_update_screen(player_pos, enemy_pos);
+        }
+        if (PORTFbits.RF3 == 0){
+            LCD_move(player_pos,enemy_pos);
         }
         if (player_pos == enemy_pos){
             LCD_setline(1);

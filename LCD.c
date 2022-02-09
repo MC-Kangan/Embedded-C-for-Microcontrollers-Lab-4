@@ -154,8 +154,20 @@ void ADC2String(char *buf, unsigned int ADC_val){
 //}
 
 void LCD_update_screen(unsigned char player_pos, unsigned char enemy_pos) {
+    LCD_sendbyte(1,0);  // clear display
+    __delay_ms(2);
     LCD_sendbyte(player_pos,0);          // set cursor position
     LCD_sendbyte(0b01000100,1);          // display 'player' character data 'D' in CGRAM to LCD 
     LCD_sendbyte(enemy_pos,0);           // set cursor position
     LCD_sendbyte(0b10111011,1);          // display 'enemy' character data '<<' in CGRAM to LCD
+}
+void LCD_move(unsigned char player_pos, unsigned char block_pos){
+    if (player_pos == 0xC0) {                   // player at line 2
+    player_pos = 0x80;                          // move player to line 1
+    LCD_update_screen(player_pos, block_pos);   // display
+    }
+//    else {                                          // player at line 1
+//        player_pos = 0xC0;                          // move player to line 2
+//        LCD_update_screen(player_pos, block_pos);   // jump to second row
+//    }
 }
