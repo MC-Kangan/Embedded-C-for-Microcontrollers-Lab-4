@@ -145,6 +145,14 @@ void ADC2String(char *buf, unsigned int ADC_val){
     
 }
 
+void showresult(char *buf, unsigned int second){
+	//code to calculate the inegeter and fractions part of a ADC value
+	// and format as a string using sprintf (see GitHub readme)
+    unsigned int time = second/2;
+    sprintf(buf,"%03d seconds :)  ",time); // Store the string into buf
+    
+}
+
 
 void LCD_update_screen(unsigned char player_pos, unsigned char enemy_pos, unsigned char enemy_pos2, unsigned char bullet1, unsigned char bullet2) {
     

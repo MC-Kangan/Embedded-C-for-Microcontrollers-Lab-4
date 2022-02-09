@@ -26,5 +26,6 @@ void ADC2String(char *buf, unsigned int number);
 void LCD_update_screen(unsigned char player_pos, unsigned char enemy_pos, unsigned char enemy_pos2, unsigned char bullet1, unsigned char bullet2);
 unsigned char LCD_move(unsigned char player_pos, unsigned char enemy_pos, unsigned char enemy_pos2, unsigned char bullet1, unsigned char bullet2);
 void LCD_reset(unsigned char player_pos, unsigned char enemy_pos, unsigned char enemy_pos2, unsigned char bullet1, unsigned char bullet2);
+void showresult(char *buf, unsigned int second);
 
 #endif

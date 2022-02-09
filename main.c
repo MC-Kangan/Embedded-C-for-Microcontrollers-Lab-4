@@ -27,15 +27,17 @@ void main(void) {
     unsigned char player_pos = 0xC0 + 7;        // position at the second row
     unsigned char enemy_pos = 0XC0 + 25;  // position at the end of the second row
     unsigned char enemy_pos2 = 0X80;  // position at the end of the first row
-    unsigned char bullet1 = 0;
-    unsigned char bullet2 = 0;
-    unsigned char second = 0; 
+    unsigned char bullet1 = 0XC0 + 25;
+    unsigned char bullet2 = 0X80;
+    unsigned int second = 0; 
+    char buf[0];
 
     LCD_update_screen(player_pos, enemy_pos, enemy_pos2, bullet1, bullet2);
     TRISFbits.TRISF2=1; //set TRIS value for pin (input)
     ANSELFbits.ANSELF2=0; //turn off analogue input on pin     
     TRISFbits.TRISF3=1; //set TRIS value for pin (input)
     ANSELFbits.ANSELF3=0; //turn off analogue input on pin  
+    
     
     while (1) {
         if (T0CON0bits.T0OUT){
@@ -45,8 +47,9 @@ void main(void) {
             if (++enemy_pos2 > 0x80 + 15) {enemy_pos2 = 0x80;}
             if (second % 5 == 0){bullet1 = enemy_pos;} 
             if (second % 3 == 0){bullet2 = enemy_pos2;} 
-            if (second == 60){second = 0;}
-            if (second > 5){bullet1 -=2; bullet2 +=2;}                   
+            if (second == 600){second = 0;}
+            bullet1 -=2; 
+            bullet2 +=2;                  
             LCD_update_screen(player_pos, enemy_pos, enemy_pos2, bullet1, bullet2);
         }
         if (PORTFbits.RF3 == 0){
@@ -60,7 +63,8 @@ void main(void) {
             LCD_sendstring("((((  BOOM  ))))");               //display 'Press RF2 to Go' in Line 2
             enemy_pos = 0XC0 + 25;  // position at the end of the second row
             enemy_pos2 = 0X80;  // position at the end of the first row
-
+            bullet1 = 0XC0 + 25;
+            bullet2 = 0X80;
             __delay_ms(2000);
         }
                 
@@ -69,9 +73,20 @@ void main(void) {
             LCD_sendstring("Game Over!!     ");               //display 'Game Over!!' in Line 1
             LCD_setline(2);
             LCD_sendstring("Press RF2 to Go ");     //display 'Press RF2 to Go' in Line 2
-            while (PORTFbits.RF2);
+            showresult(buf,second);
+            __delay_ms(2000);
+            while (PORTFbits.RF2){
+                LCD_setline(1);
+                LCD_sendstring("You survived");
+                LCD_setline(2);
+                LCD_sendstring(buf);
+            };
             enemy_pos = 0XC0 + 25;  // position at the end of the second row
             enemy_pos2 = 0X80;  // position at the end of the first row
+            bullet1 = 0XC0 + 25;
+            bullet2 = 0X80;
+            second = 0;
+            player_pos = 0xC0 + 7;
             __delay_ms(200); // Delay is needed to improve the smoothness of the player's movement
             
         }
