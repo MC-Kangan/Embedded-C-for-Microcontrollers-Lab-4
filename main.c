@@ -26,7 +26,7 @@ void main(void) {
     //	char buf[0]; // Define an array to store string
 
     unsigned char player_pos = 0xC0 + 7;        // position at the second row
-    unsigned char enemy_pos = 0XC0 + 20;  // position at the end of the second row
+    unsigned char enemy_pos = 0XC0 + 25;  // position at the end of the second row
     unsigned char enemy_pos2 = 0X80;  // position at the end of the first row
     unsigned char bullet1 = 0;
     unsigned char bullet2 = 0;
@@ -59,6 +59,9 @@ void main(void) {
             LCD_sendstring("((((  BOOM  ))))");               //display 'Game Over!!' in Line 1
             LCD_setline(2);
             LCD_sendstring("((((  BOOM  ))))");               //display 'Press RF2 to Go' in Line 2
+            enemy_pos = 0XC0 + 25;  // position at the end of the second row
+            enemy_pos2 = 0X80;  // position at the end of the first row
+
             __delay_ms(2000);
         }
                 
@@ -66,7 +69,7 @@ void main(void) {
             LCD_setline(1);
             LCD_sendstring("Game Over!!     ");               //display 'Game Over!!' in Line 1
             LCD_setline(2);
-            LCD_sendstring("Press RF2 to Go");     //display 'Press RF2 to Go' in Line 2
+            LCD_sendstring("Press RF2 to Go ");     //display 'Press RF2 to Go' in Line 2
             while (PORTFbits.RF2);
             __delay_ms(200); // Delay is needed to improve the smoothness of the player's movement
             
