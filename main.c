@@ -11,7 +11,6 @@
 #include "ADC.h"
 #include "interrupts.h"
 #include "timers.h"
-#include "comparator.h"
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
@@ -71,6 +70,8 @@ void main(void) {
             LCD_setline(2);
             LCD_sendstring("Press RF2 to Go ");     //display 'Press RF2 to Go' in Line 2
             while (PORTFbits.RF2);
+            enemy_pos = 0XC0 + 25;  // position at the end of the second row
+            enemy_pos2 = 0X80;  // position at the end of the first row
             __delay_ms(200); // Delay is needed to improve the smoothness of the player's movement
             
         }

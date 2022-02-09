@@ -174,3 +174,12 @@ unsigned char LCD_move(unsigned char player_pos,unsigned char enemy_pos, unsigne
     }
     return player_pos;
 }
+
+void LCD_reset(unsigned char player_pos, unsigned char enemy_pos, unsigned char enemy_pos2, unsigned char bullet1, unsigned char bullet2) {
+    LCD_sendbyte(1,0);  // clear display
+    player_pos = 0xC0 + 7;        // position at the second row
+    enemy_pos = 0XC0 + 20;  // position at the end of the second row
+    enemy_pos2 = 0X80;  // position at the end of the first row
+    bullet1 = 0;
+    bullet2 = 0;
+}
