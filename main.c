@@ -9,40 +9,60 @@
 #include <stdio.h>
 #include "LCD.h"
 #include "ADC.h"
+#include "interrupts.h"
+#include "timers.h"
 
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
 void main(void) {
     LCD_Init();  
-    ADC_init();
-	//LCD_sendstring("Hello World! Nice to see u");
-    //LCD_setline(2);
-    //LCD_sendstring("Hello World!");
-    
-    unsigned int ADC_val = 0;
-	char buf[0]; // Define an array to store string
-    
-//	LCD_sendbyte(0x48,1); //H
-//	LCD_sendbyte(0x65,1); //E
-//	LCD_sendbyte(0x6C,1); //L	
-//	LCD_sendbyte(0x6C,1); //L
-//	LCD_sendbyte(0x6F,1); //O
-//	LCD_sendbyte(0x20,1); //(space)
-//	LCD_sendbyte(0x57,1); //W
-//	LCD_sendbyte(0x6F,1); //O
-//	LCD_sendbyte(0x72,1); //R
-//	LCD_sendbyte(0x6C,1); //L 
-//	LCD_sendbyte(0x64,1); //D
-//	LCD_sendbyte(0x21,1); //!
+    //ADC_init();
+    Interrupts_init();
+    Timer0_init();
+    //  unsigned int ADC_val = 0;
+    //	char buf[0]; // Define an array to store string
 
+    unsigned char player_pos = 0xC0 + 1;  // position at the second row
+    unsigned char enemy_pos = 0XC0 + 15;  // position at the end of the second row
+    unsigned char player[] = {  // person character
+        0b10000,
+        0b01000,
+        0b00100,
+        0b00011,
+        0b00100,
+        0b01000,
+        0b10000,
+        0b00000  // cursor position
+    };
+    unsigned char enemy[] = {  // enemy character
+        0b11111,
+        0b11111,
+        0b11111,
+        0b11111,
+        0b11111,
+        0b11111,
+        0b11111,
+        0b00000,  // cursor position
+    };
+    LCD_create_character(player,0);
+    LCD_create_character(enemy,1);
+    LCD_update_screen(player_pos, enemy_pos);
+   
     while (1) {
     //LCD_scroll();
-        LCD_setline(1); // Set Line 1
-        ADC_val = ADC_getval(); // Get ADC_value
-        ADC2String(buf,ADC_val); // Create the string to be displayed
-        LCD_sendstring(buf);
-        __delay_ms(300);
+//        LCD_setline(1); // Set Line 1
+//        ADC_val = ADC_getval(); // Get ADC_value
+//        ADC2String(buf,ADC_val); // Create the string to be displayed
+//        LCD_sendstring(buf);
+//        __delay_ms(300);
+        if (T0CON0bits.T0OUT){
+            Timer0_restart();
+            if (--enemy_pos < 0xC0) {enemy_pos = 0xC0 + 15;}
+            LCD_sendbyte(1,0);  // clear display
+            __delay_ms(2);
+            LCD_update_screen(player_pos, enemy_pos);
+    }
     }
 }
 

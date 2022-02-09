@@ -23,5 +23,7 @@ void LCD_sendstring(char *string);
 void LCD_scroll(void);
 void LCD_clear(void);
 void ADC2String(char *buf, unsigned int number);
+void LCD_update_screen(unsigned char player, unsigned char enemy);
+void LCD_create_character(unsigned char *character, unsigned char CGRAM_loc);
 
 #endif
