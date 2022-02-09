@@ -47,7 +47,7 @@ void main(void) {
             if (++enemy_pos2 > 0x80 + 15) {enemy_pos2 = 0x80;}
             if (second % 5 == 0){bullet1 = enemy_pos;} 
             if (second % 3 == 0){bullet2 = enemy_pos2;} 
-            if (second == 600){second = 0;}
+            if (second == 1000){second = 0;}
             bullet1 -=2; 
             bullet2 +=2;                  
             LCD_update_screen(player_pos, enemy_pos, enemy_pos2, bullet1, bullet2);
@@ -61,10 +61,10 @@ void main(void) {
             LCD_sendstring("((((  BOOM  ))))");               //display 'Game Over!!' in Line 1
             LCD_setline(2);
             LCD_sendstring("((((  BOOM  ))))");               //display 'Press RF2 to Go' in Line 2
-            enemy_pos = 0XC0 + 25;  // position at the end of the second row
-            enemy_pos2 = 0X80;  // position at the end of the first row
-            bullet1 = 0XC0 + 25;
-            bullet2 = 0X80;
+            enemy_pos = 0XC0 - 20;  // position at the end of the second row
+            enemy_pos2 = 0X80 + 30;  // position at the end of the first row
+            bullet1 = 0XC0 - 20;
+            bullet2 = 0X80 + 30;
             __delay_ms(2000);
         }
                 
