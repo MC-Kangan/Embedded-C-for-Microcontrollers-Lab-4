@@ -145,37 +145,28 @@ void ADC2String(char *buf, unsigned int ADC_val){
     
 }
 
-//void LCD_create_character(unsigned char *character, unsigned char CGRAM_loc) {
-//    LCD_sendbyte(0b01000000 + CGRAM_loc * 8,0);  // Set CGRAM address in address counter.
-//    int i;
-//    for (i=0;i<8;i++) {  // sending character pattern to CGRAM
-//        LCD_sendbyte(character[i],1);
-//    }
-//}
 
-void LCD_update_screen(unsigned char player_pos, unsigned char enemy_pos) {
+void LCD_update_screen(unsigned char player_pos, unsigned char enemy_pos, unsigned char enemy_pos2) {
     
     LCD_sendbyte(1,0);  // clear display
     __delay_ms(2);
     LCD_sendbyte(player_pos,0);          // set cursor position
-    LCD_sendbyte(0b01000100,1);          // display 'player' character data 'D' in CGRAM to LCD 
+    LCD_sendbyte(0b10001111,1);          // display 'player' character data in CGRAM to LCD 
     LCD_sendbyte(enemy_pos,0);           // set cursor position
     LCD_sendbyte(0b10111011,1);          // display 'enemy' character data '<<' in CGRAM to LCD
-}
-unsigned char LCD_move(unsigned char player_pos, unsigned char block_pos){
+    LCD_sendbyte(enemy_pos2,0);           // set cursor position
+    LCD_sendbyte(0b10111100,1);          // display 'enemy' character data '<<' in CGRAM to LCD
     
-    if (player_pos == 0xC0 + 2) {                        // player at line 2
-        player_pos = 0x80 + 2;                          // move player to line 1
-        
-        return player_pos;    
+}
+unsigned char LCD_move(unsigned char player_pos,unsigned char enemy_pos, unsigned char enemy_pos2){
+    
+    if (player_pos == 0xC0 + 8) {                        // player at line 2
+        player_pos = 0x80 + 8;                          // move player to line 1
+        LCD_update_screen(player_pos, enemy_pos, enemy_pos2);   // display
     }
     else{
-        player_pos = 0xC0 + 2;
-        return player_pos;
+        player_pos = 0xC0 + 8;
+        LCD_update_screen(player_pos, enemy_pos, enemy_pos2);   // display
     }
-    
-//    else {                                          // player at line 1
-//        player_pos = 0xC0;                          // move player to line 2
-//        LCD_update_screen(player_pos, block_pos);   // jump to second row
-//    }
+    return player_pos;
 }
