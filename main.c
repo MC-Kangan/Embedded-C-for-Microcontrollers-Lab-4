@@ -14,6 +14,8 @@
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
+
+
 void main(void) {
     LCD_Init();  
     //ADC_init();
@@ -22,7 +24,7 @@ void main(void) {
     //  unsigned int ADC_val = 0;
     //	char buf[0]; // Define an array to store string
 
-    unsigned char player_pos = 0xC0;        // position at the second row
+    unsigned char player_pos = 0xC0 + 2;        // position at the second row
     unsigned char enemy_pos = 0XC0 + 15;  // position at the end of the second row
 
     LCD_update_screen(player_pos, enemy_pos);
@@ -45,7 +47,9 @@ void main(void) {
             LCD_update_screen(player_pos, enemy_pos);
         }
         if (PORTFbits.RF3 == 0){
-            LCD_move(player_pos,enemy_pos);
+            player_pos = LCD_move(player_pos,enemy_pos);
+            LCD_update_screen(player_pos, enemy_pos);   // display
+            //__delay_ms(5);
         }
         if (player_pos == enemy_pos){
             LCD_setline(1);

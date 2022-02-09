@@ -173,11 +173,6 @@
         <property key="user-pack-device-support" value=""/>
         <property key="wpo-lto" value="false"/>
       </XC8-config-global>
-      <pk4hybrid>
-        <property key="memories.programmemory.ranges" value="0-1ffff"/>
-        <property key="programmerToGoFilePath"
-                  value="C:/Users/jinyu/MPLABXProjects/lab4-kangan-yuhai.X/debug/default/lab4-kangan-yuhai_ptg"/>
-      </pk4hybrid>
     </conf>
   </confs>
 </configurationDescriptor>

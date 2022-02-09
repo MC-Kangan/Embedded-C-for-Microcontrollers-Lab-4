@@ -24,6 +24,6 @@ void LCD_scroll(void);
 void LCD_clear(void);
 void ADC2String(char *buf, unsigned int number);
 void LCD_update_screen(unsigned char player_pos, unsigned char enemy_pos);
-void LCD_move(unsigned char player_pos, unsigned char block_pos);
+unsigned char LCD_move(unsigned char player_pos, unsigned char block_pos);
 
 #endif
