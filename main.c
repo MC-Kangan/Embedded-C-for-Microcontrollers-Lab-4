@@ -15,7 +15,6 @@
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
 
-
 void main(void) {
     LCD_Init();  
     //ADC_init();
@@ -61,10 +60,10 @@ void main(void) {
             LCD_sendstring("((((  BOOM  ))))");               //display 'Game Over!!' in Line 1
             LCD_setline(2);
             LCD_sendstring("((((  BOOM  ))))");               //display 'Press RF2 to Go' in Line 2
-            enemy_pos = 0XC0 - 20;  // position at the end of the second row
-            enemy_pos2 = 0X80 + 30;  // position at the end of the first row
-            bullet1 = 0XC0 - 20;
-            bullet2 = 0X80 + 30;
+            enemy_pos = 0XC0;  // position at the end of the second row
+            enemy_pos2 = 0X80 + 40;  // position at the end of the first row
+            bullet1 = 0XC0;
+            bullet2 = 0X80 + 40;
             __delay_ms(2000);
         }
                 
