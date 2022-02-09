@@ -91,7 +91,7 @@ void LCD_Init(void)
     LCD_sendbyte(0b00000110,0); // Entry Mode Set
     
 	//remember to turn the LCD display back on at the end of the initialisation (not in the data sheet)
-    LCD_sendbyte(0b00001111,0); // Turn on the display, turn on display (D), cursor (C) and blinking (B)
+    LCD_sendbyte(0b00001100,0); // Turn on the display, turn on display (D), cursor (C) and blinking (B)
 }
 
 /************************************
@@ -138,5 +138,9 @@ void LCD_scroll(void)
 void ADC2String(char *buf, unsigned int ADC_val){
 	//code to calculate the inegeter and fractions part of a ADC value
 	// and format as a string using sprintf (see GitHub readme)
-    sprintf(buf,"V = %03d",ADC_val); // Store the string into buf
+    unsigned int int_part = 0, fract_part = 0;
+    int_part = 33*ADC_val/2550; // Integer part 
+    fract_part = 33*ADC_val*10/255 - int_part*100; // Fraction part
+    sprintf(buf,"V = %d.%02dV",int_part,fract_part); // Store the string into buf
+    
 }
