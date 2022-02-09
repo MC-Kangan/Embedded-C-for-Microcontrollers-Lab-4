@@ -146,7 +146,7 @@ void ADC2String(char *buf, unsigned int ADC_val){
 }
 
 
-void LCD_update_screen(unsigned char player_pos, unsigned char enemy_pos, unsigned char enemy_pos2) {
+void LCD_update_screen(unsigned char player_pos, unsigned char enemy_pos, unsigned char enemy_pos2, unsigned char bullet1) {
     
     LCD_sendbyte(1,0);  // clear display
     __delay_ms(2);
@@ -156,17 +156,21 @@ void LCD_update_screen(unsigned char player_pos, unsigned char enemy_pos, unsign
     LCD_sendbyte(0b10111011,1);          // display 'enemy' character data '<<' in CGRAM to LCD
     LCD_sendbyte(enemy_pos2,0);           // set cursor position
     LCD_sendbyte(0b10111100,1);          // display 'enemy' character data '<<' in CGRAM to LCD
+    LCD_sendbyte(bullet1,0);           // set cursor position
+    LCD_sendbyte(0b11001101,1);          // display bullet character data in CGRAM to LCD
+    //LCD_sendbyte(bullet2,0);           // set cursor position
+    //LCD_sendbyte(0b11001101,1);          // display bullet character data in CGRAM to LCD
     
 }
-unsigned char LCD_move(unsigned char player_pos,unsigned char enemy_pos, unsigned char enemy_pos2){
+unsigned char LCD_move(unsigned char player_pos,unsigned char enemy_pos, unsigned char enemy_pos2, unsigned char bullet1){
     
-    if (player_pos == 0xC0 + 8) {                        // player at line 2
-        player_pos = 0x80 + 8;                          // move player to line 1
-        LCD_update_screen(player_pos, enemy_pos, enemy_pos2);   // display
+    if (player_pos == 0xC0 + 7) {                        // player at line 2
+        player_pos = 0x80 + 7;                          // move player to line 1
+        LCD_update_screen(player_pos, enemy_pos, enemy_pos2, bullet1);   // display
     }
     else{
-        player_pos = 0xC0 + 8;
-        LCD_update_screen(player_pos, enemy_pos, enemy_pos2);   // display
+        player_pos = 0xC0 + 7;
+        LCD_update_screen(player_pos, enemy_pos, enemy_pos2, bullet1);   // display
     }
     return player_pos;
 }
