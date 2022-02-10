@@ -145,6 +145,7 @@ void ADC2String(char *buf, unsigned int ADC_val){
     
 }
 
+// Function to showresult (same logic as ADC2String)
 void showresult(char *buf, unsigned int second){
 	//code to calculate the inegeter and fractions part of a ADC value
 	// and format as a string using sprintf (see GitHub readme)
@@ -161,19 +162,19 @@ void LCD_update_screen(unsigned char player_pos, unsigned char enemy_pos, unsign
     LCD_sendbyte(player_pos,0);          // set cursor position
     LCD_sendbyte(0,1);                  // display 'player' character data in CGRAM to LCD 
     LCD_sendbyte(enemy_pos,0);           // set cursor position
-    LCD_sendbyte(0b10111011,1);          // display 'enemy' character data '<<' in CGRAM to LCD
+    LCD_sendbyte(0b10111011,1);          // display 'enemy1' character data '<<' in CGRAM to LCD
     LCD_sendbyte(enemy_pos2,0);           // set cursor position
-    LCD_sendbyte(0b10111100,1);          // display 'enemy' character data '<<' in CGRAM to LCD
+    LCD_sendbyte(0b10111100,1);          // display 'enemy2' character data '>>' in CGRAM to LCD
     LCD_sendbyte(bullet1,0);           // set cursor position
-    LCD_sendbyte(0b11001101,1);          // display bullet character data in CGRAM to LCD
+    LCD_sendbyte(0b11001101,1);          // display bullet1 character data in CGRAM to LCD
     LCD_sendbyte(bullet2,0);           // set cursor position
-    LCD_sendbyte(0b11001101,1);          // display bullet character data in CGRAM to LCD
+    LCD_sendbyte(0b11001101,1);          // display bullet2 character data in CGRAM to LCD
     
 }
 unsigned char LCD_move(unsigned char player_pos,unsigned char enemy_pos, unsigned char enemy_pos2, unsigned char bullet1, unsigned char bullet2){
     
-    if (player_pos == 0xC0 + 7) {                        // player at line 2
-        player_pos = 0x80 + 7;                          // move player to line 1
+    if (player_pos == 0xC0 + 7) {                                 // player at line 2
+        player_pos = 0x80 + 7;                                    // move player to line 1
         LCD_update_screen(player_pos, enemy_pos, enemy_pos2, bullet1, bullet2);   // display
     }
     else{
@@ -183,6 +184,7 @@ unsigned char LCD_move(unsigned char player_pos,unsigned char enemy_pos, unsigne
     return player_pos;
 }
 
+// This function is not used
 void LCD_reset(unsigned char player_pos, unsigned char enemy_pos, unsigned char enemy_pos2, unsigned char bullet1, unsigned char bullet2) {
     LCD_sendbyte(1,0);  // clear display
     player_pos = 0xC0 + 7;        // position at the second row
@@ -192,9 +194,10 @@ void LCD_reset(unsigned char player_pos, unsigned char enemy_pos, unsigned char 
     bullet2 = 0;
 }
 
+// Function to create characters
 void LCD_create_character(unsigned char *character, unsigned char CGRAM_loc) {
     LCD_sendbyte(0b01000000 + CGRAM_loc,0);  // Set CGRAM address in address counter.
-    int i;
+    int i; 
     for (i=0;i<8;i++) {  // sending character pattern to CGRAM
         LCD_sendbyte(character[i],1);
     }
