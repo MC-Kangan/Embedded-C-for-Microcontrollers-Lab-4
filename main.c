@@ -38,6 +38,18 @@ void main(void) {
     TRISFbits.TRISF3=1; //set TRIS value for pin (input)
     ANSELFbits.ANSELF3=0; //turn off analogue input on pin  
     
+   unsigned char player[] = {  // obstacle character
+        0b01110,
+        0b00100,
+        0b01110,
+        0b11111,
+        0b01110,
+        0b01010,
+        0b01010,
+        0b00000,  // cursor position
+    };
+   
+    LCD_create_character(player, 0);
     
     while (1) {
         if (T0CON0bits.T0OUT){
