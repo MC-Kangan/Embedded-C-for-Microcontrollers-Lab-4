@@ -58,7 +58,7 @@ void main(void) {
             if (--enemy_pos < 0xC0) {enemy_pos = 0xC0 + 20;}
             if (++enemy_pos2 > 0x80 + 15) {enemy_pos2 = 0x80;}
             if (second % 5 == 0){bullet1 = enemy_pos;} 
-            if (second % 3 == 0){bullet2 = enemy _pos2;} 
+            if (second % 3 == 0){bullet2 = enemy_pos2;} 
             if (second == 1000){second = 0;}
             bullet1 -=2; 
             bullet2 +=2;                  
