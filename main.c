@@ -73,9 +73,9 @@ void main(void) {
             LCD_setline(2); // Write line 2
             LCD_sendstring("((((  BOOM  ))))");               
             enemy_pos = 0XC0;        // Reset the location of enemy 1 
-            enemy_pos2 = 0X80 + 42;  // Reset the location of enemy 2
+            enemy_pos2 = 0X80 + 40;  // Reset the location of enemy 2
             bullet1 = 0XC0;
-            bullet2 = 0X80 + 42;
+            bullet2 = 0X80 + 40;
             __delay_ms(2000);
         }
         
