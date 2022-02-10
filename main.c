@@ -29,6 +29,7 @@ void main(void) {
     unsigned char bullet1 = 0XC0 + 25;
     unsigned char bullet2 = 0X80;
     unsigned int second = 0; 
+    unsigned int temp = 0;
     char buf[0];
 
     LCD_update_screen(player_pos, enemy_pos, enemy_pos2, bullet1, bullet2);
@@ -66,7 +67,21 @@ void main(void) {
             bullet2 = 0X80 + 40;
             __delay_ms(2000);
         }
-                
+        
+        if (PORTFbits.RF2 == 0 && PORTFbits.RF3 == 1){
+            __delay_ms(200);
+            temp = second;
+            while (PORTFbits.RF2){
+                LCD_setline(1);
+                LCD_sendstring("You Paused!      ");
+                LCD_setline(2);
+                LCD_sendstring("Press RF2 to Go ");     //display 'Press RF2 to Go' in Line 2
+            }
+            second = temp;
+            __delay_ms(200);
+        }
+
+        
         if (player_pos == enemy_pos || player_pos == enemy_pos2 || player_pos == bullet1 || player_pos == bullet2){
             LCD_setline(1);
             LCD_sendstring("Game Over!!     ");               //display 'Game Over!!' in Line 1
